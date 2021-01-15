@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-12">
+    <div class="flight text-center">
+      <div class="product-image">
+        <img src={{satelite.links.mission_patch_small}} loading="lazy" alt="image" width="128" height="128" />
+      </div>
+      <div class="flight-caption h5 flight-text-color">{{satelite.mission_name}}</div>
+      <div class="flight-details">
+        <div class="row">
+          <div class="col-6">
+            <p class="h6">Mission Ids:</p>
+          </div>
+          <div class="col-6 flight-text-color">{{satelite.mission_id.toString()}}</div>
+          <div class="col-6">
+            <p class="h6">Launch Year:</p>
+          </div>
+          <div class="col-6 flight-text-color">{{satelite.launch_year}}</div>
+          <div class="col-6">
+            <p class="h6">Successful Launch:</p>
+          </div>
+          <div class="col-6 flight-text-color">{{satelite.launch_success ? 'true' : 'false'}}</div>
+          <div class="col-6">
+            <p class="h6">Successful Landing: {{satelite.rocket.first_stage.cores[0].land_success}}</p>
+          </div>
+          <div class="col-6 flight-text-color">
+            {{satelite.rocket.first_stage.cores[0].land_success ? 'true' : 'false'}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

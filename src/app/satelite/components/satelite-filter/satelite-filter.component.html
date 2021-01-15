@@ -1,0 +1,9 @@
+<div *ngFor="let obj of spaceXFilters; let index= index">
+  <p class="filters-caption">{{obj.caption}}</p>
+  <div class="row">
+    <div *ngFor="let filter of obj.filters" class="col-6">
+      <button class="btn btn-success filter-btn" [class.active]="isActive(filter?.value, index)"
+        (click)="handleNavigation(filter.filterStr)" [value]="filter?.value">{{filter?.label}}</button>
+    </div>
+  </div>
+</div>
