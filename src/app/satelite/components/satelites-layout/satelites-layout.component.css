@@ -1,16 +1,12 @@
-.flight {
-  background-color: #ffffff;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 5px;
-}
-
-.flight-text-color {
-  color: #5f5f98;
-}
-
 .filters-container {
   padding: 10px 30px;
   background-color: #ffffff;
-  border-radius: 5px;
+  border-radius: 10px;
+}
+
+.nodata {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  width: 100%;
 }

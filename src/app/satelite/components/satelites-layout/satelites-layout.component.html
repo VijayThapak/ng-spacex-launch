@@ -9,8 +9,11 @@
       </div>
       <div class="col-sm-12 col-lg-10">
         <div class="row">
-          <div *ngFor="let satelite of satelitesData"  class="col-sm-12 col-md-6 col-lg-3">
-            <app-satelite [satelite]="satelite"></app-satelite>
+          <div *ngFor="let satelite of satelitesData; let index=index"  class="col-sm-12 col-md-6 col-lg-3">
+            <app-satelite [satelite]="satelite" [index]="index"></app-satelite>
+          </div>
+          <div class="nodata" *ngIf="!satelitesData.length">
+            No Data Available.
           </div>
         </div>
       </div>

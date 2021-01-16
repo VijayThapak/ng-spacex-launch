@@ -1,32 +1,24 @@
 <div class="row">
   <div class="col-12">
-    <div class="satelite-container">
-      <div class="flight text-center">
-        <div class="product-image">
-          <img src={{satelite.links.mission_patch_small}} loading="lazy" alt="image" width="128" height="128" />
+    <div class="satelite-card">
+      <div class="launch-image">
+        <img src={{satelite.links.mission_patch_small}} loading="lazy" alt="image" width="256" height="256" />
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <p class="h5 satelite-text">{{satelite.mission_name}} #{{index}}</p>
         </div>
-        <div class="flight-caption h5 flight-text-color">{{satelite.mission_name}}</div>
-        <div class="flight-details">
-          <div class="row">
-            <div class="col-6">
-              <p class="h6">Mission Ids:</p>
-            </div>
-            <div class="col-6 flight-text-color">{{satelite.mission_id.toString()}}</div>
-            <div class="col-6">
-              <p class="h6">Launch Year:</p>
-            </div>
-            <div class="col-6 flight-text-color">{{satelite.launch_year}}</div>
-            <div class="col-6">
-              <p class="h6">Successful Launch:</p>
-            </div>
-            <div class="col-6 flight-text-color">{{satelite.launch_success ? 'true' : 'false'}}</div>
-            <div class="col-6">
-              <p class="h6">Successful Landing: {{satelite.rocket.first_stage.cores[0].land_success}}</p>
-            </div>
-            <div class="col-6 flight-text-color">
-              {{satelite.rocket.first_stage.cores[0].land_success ? 'true' : 'false'}}
-            </div>
-          </div>
+        <div class="col-12">
+          <p class="h6">Mission Ids: <span class="satelite-text">{{renderText(satelite.mission_id.toString())}}</span></p>
+        </div>
+        <div class="col-12">
+          <p class="h6">Launch Year: <span class="satelite-text">{{renderText(satelite.launch_year)}}</span></p>
+        </div>
+        <div class="col-12">
+          <p class="h6">Successful Launch: <span class="satelite-text">{{satelite.launch_success ? 'true' : 'false'}}</span></p>
+        </div>
+        <div class="col-12">
+          <p class="h6">Successful Landing: <span class="satelite-text">{{renderText(satelite.rocket.first_stage.cores[0].land_success)}}</span></p>
         </div>
       </div>
     </div>

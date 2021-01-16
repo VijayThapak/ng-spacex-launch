@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SateliteService } from '../../services/satelite.service';
 import { FiltersType, AvailableFilters } from '../../models/filters.model';
 import { Satelite } from '../../models/satelite.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 const SPACEX_FILTERS: any[] = [
   {
@@ -64,7 +66,6 @@ const SPACEX_FILTERS: any[] = [
         value: '2016',
         filterStr: 'launch_year=2016',
       },
-      ,
       {
         label: '2017',
         value: '2017',
@@ -124,14 +125,17 @@ const SPACEX_FILTERS: any[] = [
   templateUrl: './satelites-layout.component.html',
   styleUrls: ['./satelites-layout.component.css']
 })
-export class SatelitesLayoutComponent implements OnInit {
-  satelitesData: Satelite[];
+export class SatelitesLayoutComponent implements OnInit, OnDestroy {
+  satelitesData: Satelite[] = [];
   spaceXFilters: AvailableFilters[] = [...SPACEX_FILTERS];
   appliedFilters: FiltersType = {
     launch_year: '',
     launch_success: '',
     land_success: '',
   }
+
+  private loadingFlag = false;
+  private destroy$ = new Subject();
 
   /**
    *Creates an instance of SatelitesLayoutComponent.
@@ -160,13 +164,21 @@ export class SatelitesLayoutComponent implements OnInit {
     }else {
         this.fetchSatelitesData(this.createQueryStr(this.appliedFilters), myTransferStateKey);
     }
+  }
 
+  /**
+   * subsribe query params
+   *
+   * @memberof SatelitesLayoutComponent
+   */
+  subscribeParams() {
     // subscribing query params
-    this.route.queryParams.subscribe((params: Partial<FiltersType>) => {
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params: Partial<FiltersType>) => {
       this.appliedFilters = {...this.appliedFilters , ...params} as any;
-      if(Object.keys(params).length) {
+      if(this.loadingFlag || Object.keys(params).length) {
         this.fetchSatelitesData(this.createQueryStr(this.appliedFilters));
       }
+      this.loadingFlag = true;
     })
   }
 
@@ -179,10 +191,11 @@ export class SatelitesLayoutComponent implements OnInit {
    */
   fetchSatelitesData(queryStr: string, stateKey?: any) {
     this.sateliteService.getSatelites(queryStr).subscribe((res: Satelite[]) => {
-      this.satelitesData = res;
       if(stateKey) {
-        this.transferState.set(stateKey, this.satelitesData);
+        this.transferState.set(stateKey, res);
+        this.subscribeParams();
       }
+      this.satelitesData = res;
     }, (err) =>{
       console.error("Something went wrong...", err);
     })
@@ -196,7 +209,11 @@ export class SatelitesLayoutComponent implements OnInit {
   handleNavigation = (filterStr:string) => {
     const filters: FiltersType = { ...this.appliedFilters };
     const [filterName, filterValue] = filterStr.split('=');
-    filters[filterName] = filterValue;
+    if(filters[filterName] === filterValue) {
+      filters[filterName] = '';
+    } else {
+      filters[filterName] = filterValue;
+    }
 
     this.appliedFilters = filters;
     this.updateRoute(filters);
@@ -242,5 +259,9 @@ export class SatelitesLayoutComponent implements OnInit {
       }
     }
     return appliedFilters;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
   }
 }

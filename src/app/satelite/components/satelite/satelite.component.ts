@@ -8,10 +8,15 @@ import { Satelite } from '../../models/satelite.model';
 })
 export class SateliteComponent implements OnInit {
   @Input() satelite: Satelite;
+  @Input() index: number;
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  renderText(text: string) {
+    return text ? text : 'NA';
   }
 
 }
