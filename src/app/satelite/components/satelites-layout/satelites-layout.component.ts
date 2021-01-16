@@ -164,6 +164,8 @@ export class SatelitesLayoutComponent implements OnInit, OnDestroy {
     }else {
         this.fetchSatelitesData(this.createQueryStr(this.appliedFilters), myTransferStateKey);
     }
+
+    this.subscribeParams();
   }
 
   /**
@@ -193,7 +195,6 @@ export class SatelitesLayoutComponent implements OnInit, OnDestroy {
     this.sateliteService.getSatelites(queryStr).subscribe((res: Satelite[]) => {
       if(stateKey) {
         this.transferState.set(stateKey, res);
-        this.subscribeParams();
       }
       this.satelitesData = res;
     }, (err) =>{
