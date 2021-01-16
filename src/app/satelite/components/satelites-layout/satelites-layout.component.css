@@ -8,3 +8,9 @@
 .flight-text-color {
   color: #5f5f98;
 }
+
+.filters-container {
+  padding: 10px 30px;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
