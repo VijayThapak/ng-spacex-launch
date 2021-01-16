@@ -3,7 +3,7 @@
   <div class="row">
     <div *ngFor="let filter of obj.filters" class="col-6">
       <button class="btn btn-success filter-btn" [class.active]="isActive(filter?.value, index)"
-        (click)="handleNavigation(filter.filterStr)" [value]="filter?.value">{{filter?.label}}</button>
+        (click)="handleNavigation(filter.filterStr)" [value]="filter?.value" aria-label="filter-btn">{{filter?.label}}</button>
     </div>
   </div>
 </div>

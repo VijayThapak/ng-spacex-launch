@@ -133,12 +133,25 @@ export class SatelitesLayoutComponent implements OnInit {
     land_success: '',
   }
 
+  /**
+   *Creates an instance of SatelitesLayoutComponent.
+   * @param {Router} router
+   * @param {ActivatedRoute} route
+   * @param {SateliteService} sateliteService
+   * @param {TransferState} transferState
+   * @memberof SatelitesLayoutComponent
+   */
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private sateliteService: SateliteService,
     private transferState: TransferState) { }
 
+  /**
+   * Angular lifecycle
+   *
+   * @memberof SatelitesLayoutComponent
+   */
   ngOnInit(): void {
     let myTransferStateKey = makeStateKey<any>("myDatas");
     if(this.transferState.hasKey(myTransferStateKey)) {
@@ -148,6 +161,7 @@ export class SatelitesLayoutComponent implements OnInit {
         this.fetchSatelitesData(this.createQueryStr(this.appliedFilters), myTransferStateKey);
     }
 
+    // subscribing query params
     this.route.queryParams.subscribe((params: Partial<FiltersType>) => {
       this.appliedFilters = {...this.appliedFilters , ...params} as any;
       if(Object.keys(params).length) {
@@ -156,26 +170,42 @@ export class SatelitesLayoutComponent implements OnInit {
     })
   }
 
+  /**
+   * to fetch the satelites data
+   *
+   * @param {string} queryStr
+   * @param {*} [stateKey]
+   * @memberof SatelitesLayoutComponent
+   */
   fetchSatelitesData(queryStr: string, stateKey?: any) {
     this.sateliteService.getSatelites(queryStr).subscribe((res: Satelite[]) => {
       console.log('res', res);
       this.satelitesData = res;
-      this.transferState.set(stateKey, this.satelitesData);
+      if(stateKey) {
+        this.transferState.set(stateKey, this.satelitesData);
+      }
     })
   }
 
+  /**
+   * handles the filters navigation
+   *
+   * @memberof SatelitesLayoutComponent
+   */
   handleNavigation = (filterStr:string) => {
     const filters: FiltersType = { ...this.appliedFilters };
     const [filterName, filterValue] = filterStr.split('=');
     filters[filterName] = filterValue;
 
-    const queryStr = this.createQueryStr(filters);
-    // const params = this.createQueryParams(filters);
     this.appliedFilters = filters;
     this.updateRoute(filters);
-    this.fetchSatelitesData(queryStr);
   };
 
+  /**
+   * generates the query strings
+   *
+   * @memberof SatelitesLayoutComponent
+   */
   createQueryStr = (filters : FiltersType) => {
     let queryStr = '';
     for (let key in filters) {
@@ -186,21 +216,23 @@ export class SatelitesLayoutComponent implements OnInit {
     return queryStr.slice(0, -1);
   };
 
-  // createQueryParams = (filters: FiltersType): any => {
-  //   let queryParams = {};
-  //   for (let key in filters) {
-  //     if (filters[key]) {
-  //       queryParams[key] = filters[key];
-  //     }
-  //   }
-  //   return queryParams;
-  // };
-
+  /**
+   * updates the browser url
+   *
+   * @memberof SatelitesLayoutComponent
+   */
   updateRoute = (filters: FiltersType) => {
     let appliedFilters = this.getAppliedFilters(filters);
     this.router.navigate([], { queryParams: {...appliedFilters}})
   };
 
+  /**
+   * filters the applied filters
+   *
+   * @param {FiltersType} filters
+   * @returns {Partial<FiltersType>}
+   * @memberof SatelitesLayoutComponent
+   */
   getAppliedFilters(filters: FiltersType): Partial<FiltersType> {
     let appliedFilters: Partial<FiltersType> = {};
     for(let key in filters) {
