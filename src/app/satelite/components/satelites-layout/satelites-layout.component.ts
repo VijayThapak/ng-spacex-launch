@@ -179,11 +179,12 @@ export class SatelitesLayoutComponent implements OnInit {
    */
   fetchSatelitesData(queryStr: string, stateKey?: any) {
     this.sateliteService.getSatelites(queryStr).subscribe((res: Satelite[]) => {
-      console.log('res', res);
       this.satelitesData = res;
       if(stateKey) {
         this.transferState.set(stateKey, this.satelitesData);
       }
+    }, (err) =>{
+      console.error("Something went wrong...", err);
     })
   }
 
